@@ -822,7 +822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   cubeTile: {fileID: 5864914429567242991, guid: 4ab9f95b6af164c4498798e48ce1aa45, type: 3}
   gridOrigin: {fileID: 360562350}
-  tileSpacing: 1.01
+  tileSpacing: 1
 --- !u!4 &1386165699
 Transform:
   m_ObjectHideFlags: 0
