@@ -19,7 +19,7 @@ public class GridManager : MonoBehaviour {
 
                 Vector3 tileWorldPosition = gridOrigin.position + new Vector3(x * tileSpacing, 0f, y * tileSpacing);
                 GameObject cube = Instantiate(cubeTile, tileWorldPosition, Quaternion.identity, transform);
-                cube.name = "Tile_" + x + "_" + y;
+                cube.name = $"Tile_{x}_{y}";
 
                 Tile tile = cube.GetComponent<Tile>();
                 tile.gridPosition = new Vector2Int(x, y);
