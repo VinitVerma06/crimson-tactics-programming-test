@@ -48,8 +48,8 @@ public static class Pathfinder {
         Vector2Int[] directions = {
             new Vector2Int(0, 1),   // up
             new Vector2Int(0, -1),  // down
-            new Vector2Int(1, 0),   // left
-            new Vector2Int(-1, 0)   // right
+            new Vector2Int(1, 0),   // right
+            new Vector2Int(-1, 0)   // left
         };
 
         foreach (Vector2Int dir in directions) {
@@ -57,8 +57,8 @@ public static class Pathfinder {
             int neighbourY = pos.y + dir.y;
 
             // OutOfBound check before indexing in the grid array
-            if (neighbourX >= 0 && neighbourX <= ObstacleData_SO.GRID_WIDTH &&
-                neighbourY >= 0 && neighbourY <= ObstacleData_SO.GRID_HEIGHT) {
+            if (neighbourX >= 0 && neighbourX < ObstacleData_SO.GRID_WIDTH &&
+                neighbourY >= 0 && neighbourY < ObstacleData_SO.GRID_HEIGHT) {
                 neighbours.Add(GridManager.Instance.grid[neighbourX, neighbourY]);
             }
         }
