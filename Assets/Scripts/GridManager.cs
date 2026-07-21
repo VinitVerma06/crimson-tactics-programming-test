@@ -1,6 +1,8 @@
 using UnityEngine;
 
 public class GridManager : MonoBehaviour {
+
+    public static GridManager Instance { get; private set; }
     
     public Tile[,] grid = new  Tile[10,10];
 
@@ -8,10 +10,18 @@ public class GridManager : MonoBehaviour {
     [SerializeField] private Transform gridOrigin;
     [SerializeField] private float tileSpacing = 1f;
 
-    private void Start() {
+
+    private void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
 
         GenerateGrid();
     }
+
 
     private void GenerateGrid() {
         for (int x = 0; x < grid.GetLength(0); x++) {
@@ -23,7 +33,7 @@ public class GridManager : MonoBehaviour {
 
                 Tile tile = cube.GetComponent<Tile>();
                 tile.gridPosition = new Vector2Int(x, y);
-                grid[x, y] = tile;
+                grid[x,y] = tile;
             }
         }
 
