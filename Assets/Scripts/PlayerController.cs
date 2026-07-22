@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Transform playerBase;
     [SerializeField] private Vector2Int playerStartingTilePosition;
+    [SerializeField] private MonoBehaviour[] enemyAIListeners; 
     [SerializeField] private float moveSpeed = 5f;
 
     private Tile currentTile;
@@ -79,5 +80,16 @@ public class PlayerController : MonoBehaviour {
         }
 
         isMoving = false;
+        NotifyAIListeners();
+    }
+
+    private void NotifyAIListeners() {
+        
+        foreach (MonoBehaviour listener in enemyAIListeners) {
+            
+            if (listener is IAIController ai) {
+                ai.OnPlayerMoved(currentTile);
+            }
+        }
     }
 }
