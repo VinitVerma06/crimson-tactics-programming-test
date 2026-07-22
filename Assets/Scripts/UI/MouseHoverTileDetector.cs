@@ -9,7 +9,7 @@ public class MouseHoverTileDetector : MonoBehaviour {
 
 
     private void Update() {
-        if (Mouse.current == null) return;
+        if (Mouse.current == null) return;      // No mouse connected
 
         Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
         Ray ray = mainCamera.ScreenPointToRay(mouseScreenPosition);
@@ -22,7 +22,7 @@ public class MouseHoverTileDetector : MonoBehaviour {
             }
 
         } else {
-            tileInfoText.text = ""; 
+            tileInfoText.text = "";     // Mouse isn't overlapping anything, clear the text
         }
     }
 }

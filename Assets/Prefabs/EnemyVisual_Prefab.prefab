@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6815938349634525478}
   - component: {fileID: 8762802508856461070}
   m_Layer: 0
-  m_Name: PlayerVisual_Prefab
+  m_Name: EnemyVisual_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7861a2610b2302e4e8a3761dd83bc95a, type: 2}
+  - {fileID: 2100000, guid: 4f1ef37ae953c484bbc5d5e4049147e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

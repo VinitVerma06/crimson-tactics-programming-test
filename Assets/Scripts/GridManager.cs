@@ -9,11 +9,13 @@ public class GridManager : MonoBehaviour {
 
 
     [SerializeField] private GameObject cubeTile;
-    [SerializeField] private Transform gridOrigin;
+    [SerializeField] private Transform gridOrigin;      // World position of the starting tile 
     [SerializeField] private float tileSpacing = 1f;
 
 
     private void Awake() {
+
+        // Standard singleton - only one GridManager should exist
         if (Instance != null && Instance != this) {
             Destroy(gameObject);
             return;
@@ -24,7 +26,7 @@ public class GridManager : MonoBehaviour {
         GenerateGrid();
     }
 
-
+    // Spawns a 10x10 grid of tiles and stores each one in Tile component
     private void GenerateGrid() {
         for (int x = 0; x < grid.GetLength(0); x++) {
             for (int y = 0; y < grid.GetLength(1); y++) {

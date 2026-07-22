@@ -9,10 +9,12 @@ public class ObstacleData_SO : ScriptableObject {
 
     public bool[] blockedTiles = new bool[GRID_WIDTH * GRID_HEIGHT];    // Flatten array: true = tile is blocked
     
+    // Checks whether the tile is blocked or not using it's coordinates
     public bool IsBlocked(int x, int y) {
         return blockedTiles[x + y * GRID_WIDTH];
     }
 
+    // Block or unblock a tile
     public void SetBlocked(int x, int y, bool blocked) {
         blockedTiles[x + y * GRID_WIDTH] = blocked;
     }

@@ -15,11 +15,12 @@ public class Enemy : MonoBehaviour, IAIController {
         SetEnemyPosition(startingGridPosition);
     }
 
+    // Called by PlayerController once the player finish moving
     public void OnPlayerMoved(Tile playerTile) {
         if (isMoving) return;
 
         Tile targetTile = FindBestAdjacentTile(playerTile);
-        if (targetTile == null) return;
+        if (targetTile == null) return;     // No adjacent tile available
 
         List<Tile> path = Pathfinder.FindPath(currentTile, targetTile);
         if (path == null) return;
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour, IAIController {
         StartCoroutine(MoveAlongPath(path));
     }
 
+    // Picks the closest tile to the enemy from the four neighbouring player's tile 
     private Tile FindBestAdjacentTile(Tile playerTile) {
         Vector2Int pos = playerTile.gridPosition;
         Vector2Int[] directions = {
@@ -45,7 +47,7 @@ public class Enemy : MonoBehaviour, IAIController {
             int ny = pos.y + dir.y;
 
             if (nx < 0 || nx >= ObstacleData_SO.GRID_WIDTH || ny < 0 || ny >= ObstacleData_SO.GRID_HEIGHT)
-                continue;
+                continue;   // Off grid
 
             Tile candidate = GridManager.Instance.grid[nx, ny];
             if (candidate == null || !candidate.isWalkable) continue;
@@ -73,6 +75,8 @@ public class Enemy : MonoBehaviour, IAIController {
         }
     }
 
+
+    // Walk along the path tile by tile found by pathfinder : Similar to player movement
     private IEnumerator MoveAlongPath(List<Tile> path) {
         isMoving = true;
 

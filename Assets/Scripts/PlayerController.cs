@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Transform playerBase;
     [SerializeField] private Vector2Int playerStartingTilePosition;
-    [SerializeField] private MonoBehaviour[] enemyAIListeners;
+    [SerializeField] private MonoBehaviour[] enemyAIListeners;          // Drag any IAIController component
     [SerializeField] private ObstacleData_SO obstacleData;
     [SerializeField] private float moveSpeed = 5f;
 
@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Update() {
 
-        if (isMoving) return;
+        if (isMoving) return;   // Blocks the input while moving
 
         if (Mouse.current.leftButton.wasPressedThisFrame) {
             TryMoveToClickedTile();
@@ -37,16 +37,18 @@ public class PlayerController : MonoBehaviour {
         if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
         Tile clickedTile = hit.collider.GetComponent<Tile>();
-        if (clickedTile == null) return;            // check if there is a tile
-        if (!clickedTile.isWalkable) return;        // check if it is blocked
-        if (clickedTile == currentTile) return;     // check if it is the same tile
+        if (clickedTile == null) return;            // check if clicked on a tile 
+        if (!clickedTile.isWalkable) return;        // check if tile is blocked
+        if (clickedTile == currentTile) return;     // check if standing on the same tile
         if (clickedTile.occupant != null) return;   // check if tile is ocuppied
 
+
+        // Reserves the end tile before moving 
         clickedTile.occupant = gameObject;
         currentTile.occupant = null;
 
         List<Tile> path = Pathfinder.FindPath(currentTile, clickedTile);
-        if (path == null) return;
+        if (path == null) return;   // No path exists = Fully boxed in by obstacle
 
         StartCoroutine(MoveAlongPath(path));
     }
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    // Walk along the path tile by tile found by pathfinder
     private IEnumerator MoveAlongPath(List<Tile> path) {
         isMoving = true;
 
@@ -80,9 +83,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         isMoving = false;
-        NotifyAIListeners();
+        NotifyAIListeners();    // Let the enemy react to the new player position 
     }
 
+    // Tell every subscribed AI unit that player has finished moving 
     private void NotifyAIListeners() {
         
         foreach (MonoBehaviour listener in enemyAIListeners) {
