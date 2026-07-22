@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour {
@@ -5,6 +6,7 @@ public class GridManager : MonoBehaviour {
     public static GridManager Instance { get; private set; }
     
     public Tile[,] grid = new  Tile[10,10];
+
 
     [SerializeField] private GameObject cubeTile;
     [SerializeField] private Transform gridOrigin;

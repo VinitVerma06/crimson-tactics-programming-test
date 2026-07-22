@@ -6,14 +6,17 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private Transform playerBase;
+    [SerializeField] private Vector2Int playerStartingTilePosition;
     [SerializeField] private float moveSpeed = 5f;
 
     private Tile currentTile;
     private bool isMoving;
 
     private void Start() {
-        currentTile = GetTileUnderPosition(transform.position);
+        SetPlayerPosition(playerStartingTilePosition);
     }
+
 
     private void Update() {
 
@@ -43,18 +46,29 @@ public class PlayerController : MonoBehaviour {
     }
 
     private Tile GetTileUnderPosition(Vector3 worldPosition) {
-        if (Physics.Raycast(worldPosition + Vector3.up * 5f, Vector3.down, out RaycastHit hit, 10f)) {
+        if (Physics.Raycast(playerBase.position, Vector3.down, out RaycastHit hit, 10f)) {
             return hit.collider.GetComponent<Tile>();
         }
         
         return null;
     }
 
+    private void SetPlayerPosition(Vector2Int position) {
+        if (GridManager.Instance.grid[position.x, position.y].isWalkable) {
+            currentTile = GridManager.Instance.grid[position.x, position.y];
+            if (currentTile != null) {
+                transform.position = currentTile.anchorPosition;
+            }
+        } else {
+            Debug.LogWarning("PLAYERCONTROLLER: TILE SELECTED IS INVALID OR BLOCKED!");
+        }
+    }
+
     private IEnumerator MoveAlongPath(List<Tile> path) {
         isMoving = true;
 
         foreach (Tile step in path) {
-            Vector3 targetPosition = step.transform.position + Vector3.up * 0.5f;
+            Vector3 targetPosition = step.anchorPosition;
 
             while (Vector3.Distance(transform.position, targetPosition) > 0.01f) {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);

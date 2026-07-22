@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+using System;
 using UnityEngine;
 
 public class ObstacleManager : MonoBehaviour {
@@ -17,7 +17,6 @@ public class ObstacleManager : MonoBehaviour {
         Instance = this;
     }
     private void Start() {
-        
         SpawnObstacles();
     }
 
@@ -28,7 +27,7 @@ public class ObstacleManager : MonoBehaviour {
                 if (obstacleData.IsBlocked(x, y)) {
                     Tile tile = GridManager.Instance.grid[x, y];
                     tile.isWalkable = false;
-                    Vector3 spawnPosition = tile.transform.position + Vector3.up * 0.45f;
+                    Vector3 spawnPosition = tile.anchorPosition;
                     Instantiate(obstacle, spawnPosition, Quaternion.identity, transform);
                 }
             }
