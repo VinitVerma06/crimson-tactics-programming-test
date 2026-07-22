@@ -553,8 +553,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ad9e1080d9c2f4698538a657ab0486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  moveSpeed: 5
+  obstacleData: {fileID: 11400000, guid: 73c6a5a637aa3d945837ba69e622d1eb, type: 2}
   startingGridPosition: {x: 9, y: 9}
+  moveSpeed: 5
 --- !u!4 &668329315
 Transform:
   m_ObjectHideFlags: 0
@@ -1300,6 +1301,7 @@ MonoBehaviour:
   playerStartingTilePosition: {x: 0, y: 0}
   enemyAIListeners:
   - {fileID: 668329314}
+  obstacleData: {fileID: 11400000, guid: 73c6a5a637aa3d945837ba69e622d1eb, type: 2}
   moveSpeed: 5
 --- !u!4 &2119951176
 Transform:

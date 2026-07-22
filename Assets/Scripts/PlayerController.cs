@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Transform playerBase;
     [SerializeField] private Vector2Int playerStartingTilePosition;
-    [SerializeField] private MonoBehaviour[] enemyAIListeners; 
+    [SerializeField] private MonoBehaviour[] enemyAIListeners;
+    [SerializeField] private ObstacleData_SO obstacleData;
     [SerializeField] private float moveSpeed = 5f;
 
     private Tile currentTile;
@@ -36,9 +37,13 @@ public class PlayerController : MonoBehaviour {
         if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
         Tile clickedTile = hit.collider.GetComponent<Tile>();
-        if (clickedTile == null) return;
-        if (!clickedTile.isWalkable) return;
-        if (clickedTile == currentTile) return;
+        if (clickedTile == null) return;            // check if there is a tile
+        if (!clickedTile.isWalkable) return;        // check if it is blocked
+        if (clickedTile == currentTile) return;     // check if it is the same tile
+        if (clickedTile.occupant != null) return;   // check if tile is ocuppied
+
+        clickedTile.occupant = gameObject;
+        currentTile.occupant = null;
 
         List<Tile> path = Pathfinder.FindPath(currentTile, clickedTile);
         if (path == null) return;
@@ -46,16 +51,9 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(MoveAlongPath(path));
     }
 
-    private Tile GetTileUnderPosition(Vector3 worldPosition) {
-        if (Physics.Raycast(playerBase.position, Vector3.down, out RaycastHit hit, 10f)) {
-            return hit.collider.GetComponent<Tile>();
-        }
-        
-        return null;
-    }
-
+    // Set the initial position of the player
     private void SetPlayerPosition(Vector2Int position) {
-        if (GridManager.Instance.grid[position.x, position.y].isWalkable) {
+        if (!obstacleData.IsBlocked(position.x, position.y)) {
             currentTile = GridManager.Instance.grid[position.x, position.y];
             if (currentTile != null) {
                 transform.position = currentTile.anchorPosition;
@@ -76,7 +74,9 @@ public class PlayerController : MonoBehaviour {
                 yield return null;
             }
 
-            currentTile = step; 
+            currentTile.occupant = null;
+            currentTile = step;
+            currentTile.occupant = gameObject;
         }
 
         isMoving = false;

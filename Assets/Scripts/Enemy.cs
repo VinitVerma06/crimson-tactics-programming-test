@@ -4,15 +4,15 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour, IAIController {
 
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private ObstacleData_SO obstacleData;
     [SerializeField] private Vector2Int startingGridPosition;
+    [SerializeField] private float moveSpeed = 5f;
 
     private Tile currentTile;
     private bool isMoving;
 
     private void Start() {
-        currentTile = GridManager.Instance.grid[startingGridPosition.x, startingGridPosition.y];
-        transform.position = currentTile.anchorPosition;
+        SetEnemyPosition(startingGridPosition);
     }
 
     public void OnPlayerMoved(Tile playerTile) {
@@ -61,6 +61,18 @@ public class Enemy : MonoBehaviour, IAIController {
         return bestTile;
     }
 
+    // Set the initial position of the enemy
+    private void SetEnemyPosition(Vector2Int position) {
+        if (!obstacleData.IsBlocked(position.x, position.y)) {
+            currentTile = GridManager.Instance.grid[position.x, position.y];
+            if (currentTile != null) {
+                transform.position = currentTile.anchorPosition;
+            }
+        } else {
+            Debug.LogWarning("ENEMY: TILE SELECTED IS INVALID OR BLOCKED!");
+        }
+    }
+
     private IEnumerator MoveAlongPath(List<Tile> path) {
         isMoving = true;
 
@@ -71,8 +83,9 @@ public class Enemy : MonoBehaviour, IAIController {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 yield return null;
             }
-
+            currentTile.occupant = null;
             currentTile = step;
+            currentTile.occupant = gameObject;
         }
 
         isMoving = false;
